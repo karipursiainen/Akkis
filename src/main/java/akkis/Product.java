@@ -10,16 +10,13 @@ import javax.validation.constraints.Size;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 
-
-/**
- * Entity JPA toteututs.
- * Managed Bean tarjotaan JSF:lle. VOidaan käyttää JSF:n kontrollerista
- */
-
 @ManagedBean
 @RequestScoped
 @Entity
-@NamedQuery(name = "searchAllProducts", query = "SELECT b from Product b") 
+@NamedQueries({
+	@NamedQuery(name = "searchAllProducts", query = "SELECT b from Product b"),
+	@NamedQuery(name = "productByID", query = "SELECT c from Product c WHERE c.id = :id") 	
+})
 public class Product implements Serializable {
 
 	@Id
@@ -27,7 +24,7 @@ public class Product implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_seq_product")
     private Long id;
     
-    @Size(min = 2, message = "Anna tuotteen nimi")
+    @Size(min = 2, message = "Write product name")
     private String name; 
 
     //@Min(1)

@@ -59,31 +59,68 @@ public class AkkisEjb {
 		
 		em.persist(company);
 		
-		Delivery delivery = new Delivery();
-		em.persist(delivery);
+		
+//		Delivery delivery1 = new Delivery();
+//		em.persist(delivery1);
+		
+//		Delivery delivery2 = new Delivery();
+//		em.persist(delivery2);
 		
 		Date tanaan = new Date();
 		SimpleDateFormat fdate = new SimpleDateFormat("dd.MM.yyyy");
 		fdate.format(tanaan);
-//			
+			
 		Invoice invoice = new Invoice();
-		invoice.setDelivery(delivery);
+	//	invoice.setDelivery(delivery1);
 		invoice.setSum(100);
 		invoice.setDate(tanaan);
 		invoice.setDuePeriod(14);
 		invoice.setInfoText("InfoText");
 		
-		em.persist(invoice);
-
+/*		
+		Invoice invoice1 = new Invoice();
+//		invoice1.setDelivery(delivery2);
+		invoice1.setSum(120);
+		invoice1.setDate(tanaan);
+		invoice1.setDuePeriod(10);
+		invoice1.setInfoText("InfoText2");
+	*/	
 		
+		em.persist(invoice);
+	//	em.persist(invoice1);
+
+		List<Invoice> invoices1 = new ArrayList<Invoice>();
+		invoices1.add(invoice);
+	//	List<Invoice> invoices2 = new ArrayList<Invoice>();
+	//	invoices2.add(invoice1);
+		
+		Delivery deliverylist1 = new Delivery();
+	//	Delivery deliverylist2 = new Delivery();
+		deliverylist1.setInvoices(invoices1);
+	//	deliverylist2.setInvoices(invoices2);
+		
+		em.persist(deliverylist1);
+	//	em.persist(deliverylist2);
+				
 		Product product = new Product();
 		product.setName("Tuote1");
 		product.setPrice(20.0);
 		
 		em.persist(product);
 		
+		
 	}
 
+	public void saveInvoice(Invoice in) {
+		
+		List<Invoice> invoices3 = new ArrayList<Invoice>();
+		invoices3.add(in);
+		Delivery deliverylist3 = new Delivery();
+		deliverylist3.setInvoices(invoices3);
+		em.persist(in);
+		em.persist(deliverylist3);
+	}
+	
 	public void save(Object book) {
 		em.persist(book);
 	}
@@ -156,6 +193,23 @@ public class AkkisEjb {
 		return products;
 
 	}
+	
+	public Product getProduct(Long id) {
+		
+		try {
+			Object user = em.createNamedQuery("productByID")
+				.setParameter("id", id).getSingleResult();
+			
+			System.out.println(user);
+			
+			return (Product) user;
+		}
+		catch (javax.persistence.NoResultException ex)
+		{
+			return null;
+		}
+		
+	}
 
 	public List<Delivery> getDeliveries() {
 		List<Delivery> deliveries = null;
@@ -165,6 +219,5 @@ public class AkkisEjb {
 		return deliveries;
 	}
 
-	
-	
+		
 }
